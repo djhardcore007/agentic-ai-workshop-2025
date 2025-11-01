@@ -1,4 +1,4 @@
-.PHONY: help prereqs build server up shell logs down restart rebuild ps clean
+.PHONY: help prereqs build server up shell ssh logs down restart rebuild ps clean
 
 # Detect Compose command (Docker v2 preferred)
 COMPOSE := $(shell if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; then echo "docker compose"; elif command -v docker-compose >/dev/null 2>&1; then echo "docker-compose"; else echo "docker compose"; fi)
@@ -15,7 +15,8 @@ help:
 	@echo "  make build      - Build images"
 	@echo "  make server     - Start MCP server (foreground)"
 	@echo "  make up         - Start MCP server (detached)"
-	@echo "  make shell      - Open dev shell (interactive)"
+	@echo "  make shell      - Open shell in service container (exec if running; else run new) [SVC=name]"
+	@echo "  make ssh        - Exec into a running container shell (default: mcp-server) [SVC=name]"
 	@echo "  make logs       - Tail logs (default: mcp-server) [SVC=name]"
 	@echo "  make down       - Stop and remove containers"
 	@echo "  make restart    - Restart a service (default: mcp-server) [SVC=name]"
@@ -48,8 +49,13 @@ up: prereqs
 	$(COMPOSE) up -d mcp-server
 
 shell: prereqs
-	@echo "Opening dev shell (bash)"
-	$(COMPOSE) run --rm dev-shell
+	@echo "Opening shell (service: $(SVC); trying exec, falling back to run)"
+	-$(COMPOSE) exec $(SVC) /bin/bash || $(COMPOSE) run --rm $(SVC) /bin/bash
+
+# Exec into a running service container (default SVC=mcp-server)
+ssh:
+	@echo "Exec into running container shell (service: $(SVC))"
+	$(COMPOSE) exec $(SVC) /bin/bash
 
 logs:
 	$(COMPOSE) logs -f $(SVC)

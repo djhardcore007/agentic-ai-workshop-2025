@@ -87,13 +87,19 @@ A sophisticated newspaper agent that:
 
 ### Make
 ```
-# this start the mcp server
+# 1) Build images (one-time or after changes)
 make build
 
-# u can interact w the server by set up the client in whatever env
-# 1. local env w venv
-# 2. inside the same docker
-# 3. call make client
+# 2) Start the MCP server in the background
+make up
+
+# 3) Open a shell into the running container
+make shell
+
+# inside the shell
+# 4) Run the client
+cd client
+python news-agent-client.py
 ```
 ### Prerequisites
 
