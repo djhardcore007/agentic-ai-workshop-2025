@@ -13,7 +13,25 @@ A comprehensive educational project demonstrating production-grade agentic AI th
 </div>
 
 ---
+## Usage
 
+### Make
+```
+# 1) Build images (one-time or after changes)
+make build
+
+# 2) Start the MCP server in the background
+make up
+
+# 3) Open a shell into the running container
+make shell
+
+# inside the shell
+# 4) Run the client
+cd client
+python news-agent-client.py
+```
+---
 ## Overview
 
 ### What This Is
@@ -84,23 +102,6 @@ A sophisticated newspaper agent that:
 ---
 
 ## Quick Start
-
-### Make
-```
-# 1) Build images (one-time or after changes)
-make build
-
-# 2) Start the MCP server in the background
-make up
-
-# 3) Open a shell into the running container
-make shell
-
-# inside the shell
-# 4) Run the client
-cd client
-python news-agent-client.py
-```
 ### Prerequisites
 
 ```bash
